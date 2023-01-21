@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect } from "react";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme, GlobalStyles } from "./common/themes";
+import { Home } from "./pages/home";
+import { useAppSelector, useAppDispatch } from "redux/hooks";
+import { closeBar } from "redux/slices/barSlice";
 
 function App() {
+  const { isDarkMode } = useAppSelector((state) => state.theme);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    function handleResize() {
+      dispatch(closeBar());
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyles />
+      <Home />
+    </ThemeProvider>
   );
 }
 

@@ -1,0 +1,1 @@
+export { DeleteBoard } from "./DeleteBoard";
